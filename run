@@ -1,0 +1,15 @@
+npx create-react-app smartpark-frontend
+cd smartpark-frontend
+
+
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+npm install
+npm start
+ 
+ if error 
+ 
+rd /s /q node_modules
+del package-lock.json
+npm install
+npm start
