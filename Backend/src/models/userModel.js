@@ -1,26 +1,18 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
+import pool from "../config/db.js";
 
-const User = sequelize.define("User", {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  username: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-});
+export const createUser = async (username, email, password) => {
+  const query = `
+    INSERT INTO users (username, email, password)
+    VALUES ($1, $2, $3)
+    RETURNING *;
+  `;
+  const values = [username, email, password];
+  const result = await pool.query(query, values);
+  return result.rows[0];
+};
 
-export default User;
+export const findUserByEmail = async (email) => {
+  const query = "SELECT * FROM users WHERE email = $1;";
+  const result = await pool.query(query, [email]);
+  return result.rows[0];
+};

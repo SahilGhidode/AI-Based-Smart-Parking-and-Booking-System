@@ -1,23 +1,28 @@
-import { Sequelize } from "sequelize";
+// src/config/db.js
+import pkg from "pg";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config({ path: ".env" });
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASS,
-  {
-    host: process.env.DB_HOST,
-    dialect: "postgres",
+const { Pool } = pkg;
+
+const pool = new Pool({
+  user: process.env.DB_USER || "smart_user",
+  host: process.env.DB_HOST || "localhost",
+  database: process.env.DB_NAME || "smart_parking",
+  password: process.env.DB_PASSWORD || "smart_password",
+  port: process.env.DB_PORT || 5432,
+});
+
+// ✅ Test connection
+(async () => {
+  try {
+    const client = await pool.connect();
+    console.log("✅ PostgreSQL Database connected successfully!");
+    client.release();
+  } catch (err) {
+    console.error("❌ PostgreSQL connection error:", err.message);
   }
-);
+})();
 
-try {
-  await sequelize.authenticate();
-  console.log("✅ Database connected successfully");
-} catch (error) {
-  console.error("❌ Database connection failed:", error);
-}
-
-export default sequelize;
+export default pool;

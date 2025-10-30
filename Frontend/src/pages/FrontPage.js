@@ -1,24 +1,49 @@
+/**
+ * FrontPage Component
+ * Landing page with hero section, features, and authentication form
+ * Includes HeroAuth component for signup/login functionality
+ */
+
 "use client"
 
 import { useState } from "react"
 
+/**
+ * HeroAuth Component
+ * Handles both signup and login with email/phone and password
+ * Added name field to signup form for better user registration
+ */
 const HeroAuth = ({ onLogin }) => {
+  // State management for authentication form
   const [tab, setTab] = useState("signup")
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
   const [password, setPassword] = useState("")
 
+  /**
+   * Handle authentication (signup or login)
+   * Validates inputs based on current tab and calls onLogin callback
+   */
   const handleAuth = () => {
     if (tab === "signup") {
+      // Signup validation
+      if (!name.trim()) return alert("Enter your name")
       if (!email || !password) return alert("Enter email & password")
-      onLogin({ email, phone, password, role: "user" })
+
+      onLogin({ name, email, phone, password, role: "user" })
       alert("Signup successful!")
     } else {
+      // Login validation
       if (!email && !phone) return alert("Enter email or phone")
       if (!password) return alert("Enter password")
+
       onLogin({ email, phone, password, role: "user" })
       alert("Login successful!")
     }
+
+    // Clear form after submission
+    setName("")
     setEmail("")
     setPhone("")
     setPassword("")
@@ -26,12 +51,14 @@ const HeroAuth = ({ onLogin }) => {
 
   return (
     <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl animate-fade-in-up border border-purple-100">
+      {/* Tab Navigation */}
       <div className="flex gap-2 mb-8 bg-gray-100 p-1 rounded-lg">
         <button
           className={`flex-1 py-3 font-semibold rounded-md transition-all duration-300 ${
             tab === "signup" ? "bg-purple-600 text-white shadow-lg" : "text-gray-600 hover:text-gray-900"
           }`}
           onClick={() => setTab("signup")}
+          aria-pressed={tab === "signup"}
         >
           Sign Up
         </button>
@@ -40,13 +67,29 @@ const HeroAuth = ({ onLogin }) => {
             tab === "login" ? "bg-purple-600 text-white shadow-lg" : "text-gray-600 hover:text-gray-900"
           }`}
           onClick={() => setTab("login")}
+          aria-pressed={tab === "login"}
         >
           Login
         </button>
       </div>
 
+      {/* Signup Form */}
       {tab === "signup" && (
         <div className="flex flex-col gap-4">
+          {/* Name Input - Added name field for signup */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+            <input
+              type="text"
+              placeholder="John Doe"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              aria-label="Full Name"
+            />
+          </div>
+
+          {/* Email Input */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
             <input
@@ -55,8 +98,11 @@ const HeroAuth = ({ onLogin }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              aria-label="Email"
             />
           </div>
+
+          {/* Phone Input */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Phone (optional)</label>
             <input
@@ -65,8 +111,11 @@ const HeroAuth = ({ onLogin }) => {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              aria-label="Phone Number"
             />
           </div>
+
+          {/* Password Input */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
             <input
@@ -75,8 +124,11 @@ const HeroAuth = ({ onLogin }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              aria-label="Password"
             />
           </div>
+
+          {/* Submit Button */}
           <button
             onClick={handleAuth}
             className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all duration-300 font-semibold mt-2"
@@ -86,8 +138,10 @@ const HeroAuth = ({ onLogin }) => {
         </div>
       )}
 
+      {/* Login Form */}
       {tab === "login" && (
         <div className="flex flex-col gap-4">
+          {/* Email or Phone Input */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Email or Phone</label>
             <input
@@ -99,8 +153,11 @@ const HeroAuth = ({ onLogin }) => {
                 else setEmail(e.target.value)
               }}
               className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              aria-label="Email or Phone"
             />
           </div>
+
+          {/* Password Input */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
             <input
@@ -109,8 +166,11 @@ const HeroAuth = ({ onLogin }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              aria-label="Password"
             />
           </div>
+
+          {/* Submit Button */}
           <button
             onClick={handleAuth}
             className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all duration-300 font-semibold mt-2"
@@ -123,11 +183,17 @@ const HeroAuth = ({ onLogin }) => {
   )
 }
 
+/**
+ * FrontPage Component
+ * Main landing page with navigation, hero section, features, and footer
+ */
 const FrontPage = ({ onLogin }) => {
   return (
     <div className="min-h-screen font-sans bg-gradient-to-b from-white via-purple-50 to-white">
+      {/* Navigation Header */}
       <header className="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-gray-200">
         <div className="container mx-auto flex justify-between items-center px-6 py-4 max-w-7xl">
+          {/* Logo */}
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-purple-700 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">🅿️</span>
@@ -136,6 +202,8 @@ const FrontPage = ({ onLogin }) => {
               SmartPark
             </h1>
           </div>
+
+          {/* Navigation Links */}
           <nav className="hidden md:flex gap-8 items-center">
             <a href="#home" className="text-gray-700 hover:text-purple-600 transition font-medium">
               Home
@@ -152,6 +220,7 @@ const FrontPage = ({ onLogin }) => {
             <a href="#contact" className="text-gray-700 hover:text-purple-600 transition font-medium">
               Contact
             </a>
+            {/* Language Selector */}
             <select className="border border-gray-300 rounded-lg px-3 py-2 text-gray-700 bg-white hover:border-purple-400 transition">
               <option value="en">EN</option>
               <option value="hi">HI</option>
@@ -160,11 +229,13 @@ const FrontPage = ({ onLogin }) => {
         </div>
       </header>
 
+      {/* Hero Section */}
       <section id="home" className="min-h-screen relative pt-20 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-100 via-transparent to-purple-50 opacity-60"></div>
 
         <div className="relative z-10 container mx-auto px-6 max-w-7xl">
           <div className="grid md:grid-cols-2 gap-12 items-center">
+            {/* Hero Text */}
             <div className="animate-fade-in-up">
               <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
                 Find Your Perfect{" "}
@@ -186,6 +257,7 @@ const FrontPage = ({ onLogin }) => {
               </div>
             </div>
 
+            {/* Hero Auth Form */}
             <div className="animate-slide-in-right">
               <HeroAuth onLogin={onLogin} />
               <p className="text-center text-gray-600 mt-6 text-sm">✨ Book your parking slot in seconds after login</p>
@@ -194,6 +266,7 @@ const FrontPage = ({ onLogin }) => {
         </div>
       </section>
 
+      {/* How It Works Section */}
       <section id="steps" className="py-24 bg-white">
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="text-center mb-16">
@@ -222,6 +295,7 @@ const FrontPage = ({ onLogin }) => {
         </div>
       </section>
 
+      {/* Features Section */}
       <section id="features" className="py-24 bg-gradient-to-b from-purple-50 to-white">
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="text-center mb-16">
@@ -251,6 +325,7 @@ const FrontPage = ({ onLogin }) => {
         </div>
       </section>
 
+      {/* About Section */}
       <section id="about" className="py-24 bg-white">
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-3xl p-12 md:p-16 text-white">
@@ -264,13 +339,17 @@ const FrontPage = ({ onLogin }) => {
         </div>
       </section>
 
+      {/* Footer Section */}
       <section id="contact" className="py-16 bg-gray-900 text-white">
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="grid md:grid-cols-3 gap-12 mb-12">
+            {/* Brand Info */}
             <div>
               <h3 className="text-lg font-bold mb-4">SmartPark</h3>
               <p className="text-gray-400">Making parking smarter, one spot at a time.</p>
             </div>
+
+            {/* Quick Links */}
             <div>
               <h3 className="text-lg font-bold mb-4">Quick Links</h3>
               <ul className="space-y-2 text-gray-400">
@@ -291,12 +370,16 @@ const FrontPage = ({ onLogin }) => {
                 </li>
               </ul>
             </div>
+
+            {/* Contact Info */}
             <div>
               <h3 className="text-lg font-bold mb-4">Contact</h3>
               <p className="text-gray-400">📧 info@smartpark.com</p>
               <p className="text-gray-400">📱 +91 9876543210</p>
             </div>
           </div>
+
+          {/* Copyright */}
           <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
             <p>&copy; 2025 SmartPark. All rights reserved.</p>
           </div>

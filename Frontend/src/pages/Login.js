@@ -1,50 +1,57 @@
-// src/pages/Login.js
 import React, { useState } from "react";
+import API from "../api";
 
-const Login = ({ onLogin }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("user");
+const Login = () => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onLogin({ username, role });
+    try {
+      const res = await API.post("/auth/login", formData);
+      localStorage.setItem("token", res.data.token);
+      alert("✅ Login successful!");
+    } catch (error) {
+      alert("❌ Login failed!");
+      console.error(error.response?.data || error.message);
+    }
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-pink-500 to-red-500">
-      <div className="bg-white p-12 rounded-3xl shadow-2xl w-96">
-        <h1 className="text-3xl font-bold text-center text-gray-700 mb-6">
-          Welcome to Smart Parking
-        </h1>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
-          />
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
-          >
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
-          </select>
-          <button className="bg-purple-600 text-white p-3 rounded-lg font-semibold hover:bg-purple-700 transition">
-            Login
-          </button>
-        </form>
-      </div>
+    <div className="p-8">
+      <h1 className="text-2xl font-bold mb-4">Login</h1>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-80">
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          className="border p-2 rounded"
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          className="border p-2 rounded"
+          required
+        />
+        <button
+          type="submit"
+          className="bg-purple-600 text-white p-2 rounded hover:bg-purple-700"
+        >
+          Login
+        </button>
+      </form>
     </div>
   );
 };
