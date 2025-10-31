@@ -1,59 +1,42 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
+import { useState } from "react";
+import { useLanguage } from "@/app/context/LanguageContext";
+import { useAuth } from "@/app/context/AuthContext";
+import { translations } from "@/lib/translations";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import dynamic from "next/dynamic";
 
-import { useState } from "react"
-import { useLanguage } from "@/app/context/LanguageContext"
-import { useAuth } from "@/app/context/AuthContext"
-import { translations } from "@/lib/translations"
-import Navigation from "@/components/Navigation"
-import Footer from "@/components/Footer"
-import { useRouter } from "next/navigation"
+// ✅ Dynamically import the MapPage (no SSR)
+const MapPage = dynamic(() => import("../map/page"), { ssr: false });
 
 export default function Booking() {
-  const { language } = useLanguage()
-  const { isLoggedIn } = useAuth()
-  const router = useRouter()
-  const t = translations[language]
+  const { language } = useLanguage();
+  const { isLoggedIn } = useAuth();
+  const t = translations[language];
 
   const [formData, setFormData] = useState({
     location: "",
     date: "",
     time: "",
     duration: "1",
-  })
+  });
 
-  const [selectedSpot, setSelectedSpot] = useState<number | null>(null)
+  const [selectedSpot, setSelectedSpot] = useState<number | null>(null);
 
-  if (!isLoggedIn) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Navigation />
-        <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl font-bold text-text mb-4">{t.booking}</h1>
-          <p className="text-xl text-text-light mb-8">Please log in to book a parking spot.</p>
-          <button
-            onClick={() => router.push("/login")}
-            className="px-8 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition"
-          >
-            {t.login}
-          </button>
-        </div>
-        <Footer />
-      </div>
-    )
-  }
+  // ✅ No login restriction now — everyone can see & interact with the page
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Handle booking submission
-    console.log("Booking submitted:", formData, selectedSpot)
-  }
+    e.preventDefault();
+    console.log("Booking submitted:", formData, selectedSpot);
+  };
 
   const parkingSpots = Array.from({ length: 12 }, (_, i) => ({
     id: i + 1,
     available: Math.random() > 0.4,
-  }))
+  }));
 
   return (
     <div className="min-h-screen bg-background">
@@ -61,52 +44,74 @@ export default function Booking() {
 
       <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl font-bold text-text mb-12 text-center">{t.booking}</h1>
+          <h1 className="text-4xl font-bold text-text mb-12 text-center">
+            {t.booking}
+          </h1>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Booking Form */}
             <div className="lg:col-span-1">
               <div className="p-8 bg-surface rounded-xl border border-border">
-                <h2 className="text-2xl font-bold text-text mb-6">Search Parking</h2>
+                <h2 className="text-2xl font-bold text-text mb-6">
+                  Search Parking
+                </h2>
+
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-semibold text-text mb-2">{t.selectLocation}</label>
+                    <label className="block text-sm font-semibold text-text mb-2">
+                      {t.selectLocation}
+                    </label>
                     <input
                       type="text"
                       placeholder="City Center"
                       value={formData.location}
-                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, location: e.target.value })
+                      }
                       className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-primary"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-text mb-2">{t.selectDate}</label>
+                    <label className="block text-sm font-semibold text-text mb-2">
+                      {t.selectDate}
+                    </label>
                     <input
                       type="date"
                       value={formData.date}
-                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, date: e.target.value })
+                      }
                       className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-primary"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-text mb-2">{t.selectTime}</label>
+                    <label className="block text-sm font-semibold text-text mb-2">
+                      {t.selectTime}
+                    </label>
                     <input
                       type="time"
                       value={formData.time}
-                      onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, time: e.target.value })
+                      }
                       className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-primary"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-text mb-2">{t.duration}</label>
+                    <label className="block text-sm font-semibold text-text mb-2">
+                      {t.duration}
+                    </label>
                     <input
                       type="number"
                       min="1"
                       value={formData.duration}
-                      onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, duration: e.target.value })
+                      }
                       className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-primary"
                     />
                   </div>
+
                   <button
                     type="submit"
                     className="w-full px-4 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition"
@@ -117,10 +122,19 @@ export default function Booking() {
               </div>
             </div>
 
-            {/* Parking Spots Grid */}
+            {/* Map + Parking Spots */}
             <div className="lg:col-span-2">
               <div className="p-8 bg-surface rounded-xl border border-border">
-                <h2 className="text-2xl font-bold text-text mb-6">{t.availableSpots}</h2>
+                {/* Google Map */}
+                <h2 className="text-2xl font-bold text-text mb-4">Map View</h2>
+                <div className="rounded-lg overflow-hidden border border-border mb-8">
+                  <MapPage />
+                </div>
+
+                {/* Available Parking Spots */}
+                <h2 className="text-2xl font-bold text-text mb-6">
+                  {t.availableSpots}
+                </h2>
                 <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
                   {parkingSpots.map((spot) => (
                     <button
@@ -139,13 +153,17 @@ export default function Booking() {
                     </button>
                   ))}
                 </div>
+
                 {selectedSpot && (
                   <div className="mt-8 p-4 bg-primary/10 border border-primary rounded-lg">
                     <p className="text-text mb-4">
-                      Selected Spot: <span className="font-bold text-primary">#{selectedSpot}</span>
+                      Selected Spot:{" "}
+                      <span className="font-bold text-primary">
+                        #{selectedSpot}
+                      </span>
                     </p>
                     <button className="w-full px-4 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition">
-                      {t.reserveNow}
+                      {isLoggedIn ? t.reserveNow : "Login to Reserve"}
                     </button>
                   </div>
                 )}
@@ -157,5 +175,5 @@ export default function Booking() {
 
       <Footer />
     </div>
-  )
+  );
 }
