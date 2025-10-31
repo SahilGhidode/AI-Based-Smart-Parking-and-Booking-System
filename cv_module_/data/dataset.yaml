@@ -1,0 +1,13 @@
+# YOLOv8 dataset configuration for Parking Lot Detection
+
+train: C:\Users\RICHA MISHRA\ParkVision\SmartParking\cv_module_\data\images\train
+val: C:\Users\RICHA MISHRA\ParkVision\SmartParking\cv_module_\data\images\val
+
+# Number of classes
+nc: 3
+
+# Class names
+names:
+  0: car
+  1: occupied
+  2: empty

@@ -1,7 +1,0 @@
-opencv-python
-cvzone
-numpy
-torch
-torchvision
-ultralytics
-matplotlib
