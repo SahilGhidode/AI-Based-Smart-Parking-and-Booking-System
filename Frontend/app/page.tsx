@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { useLanguage } from "./context/LanguageContext"
 import { useAuth } from "./context/AuthContext"
 import { translations } from "@/lib/translations"
@@ -52,9 +53,14 @@ export default function Home() {
       {/* Hero Section */}
       <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-surface to-background">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          {/* Left side text */}
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold text-text mb-6 leading-tight">{t.findParkingTitle}</h1>
-            <p className="text-xl text-text-light mb-8 leading-relaxed">{t.findParkingDesc}</p>
+            <h1 className="text-4xl md:text-5xl font-bold text-text mb-6 leading-tight">
+              {t.findParkingTitle}
+            </h1>
+            <p className="text-xl text-text-light mb-8 leading-relaxed">
+              {t.findParkingDesc}
+            </p>
             <div className="flex gap-4">
               <Link
                 href={isLoggedIn ? "/booking" : "/login"}
@@ -70,20 +76,39 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <div className="relative h-96 bg-gradient-to-br from-primary to-accent rounded-2xl opacity-20"></div>
+
+          {/* Right side image */}
+          <div className="relative h-96">
+            <Image
+              src="/assets/image.png"
+              alt="Smart Parking Preview"
+              fill
+              className="object-cover rounded-2xl shadow-lg"
+              priority
+            />
+          </div>
         </div>
       </div>
 
       {/* Features Preview */}
       <div className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-text mb-12 text-center">Why Choose SmartPark?</h2>
+          <h2 className="text-3xl font-bold text-text mb-12 text-center">
+            Why Choose SmartPark?
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, idx) => (
-              <div key={idx} className="p-6 border border-border rounded-xl hover:shadow-lg transition">
+              <div
+                key={idx}
+                className="p-6 border border-border rounded-xl hover:shadow-lg transition"
+              >
                 <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold text-text mb-2">{t[feature.titleKey as keyof typeof t]}</h3>
-                <p className="text-text-light">{t[feature.descKey as keyof typeof t]}</p>
+                <h3 className="text-xl font-semibold text-text mb-2">
+                  {t[feature.titleKey as keyof typeof t]}
+                </h3>
+                <p className="text-text-light">
+                  {t[feature.descKey as keyof typeof t]}
+                </p>
               </div>
             ))}
           </div>

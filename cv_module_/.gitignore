@@ -1,0 +1,64 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.Python
+
+# === Virtual Environment ===
+venv/
+env/
+ENV/
+.venv/
+venv.bak/
+
+# === Data and Run Directories ===
+data/
+runs/
+
+# === Media Files (large generated outputs) ===
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.gif
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# === Model Weights / Checkpoints ===
+*.pt
+*.onnx
+*.weights
+*.ckpt
+
+# === Logs, Outputs, and Temp Files ===
+*.log
+*.out
+*.csv
+*.json
+*.tmp
+*.bak
+*.npy
+*.npz
+
+# === IDE and Editor files ===
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === OS generated files ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === Test / Cache ===
+.cache/
+pytest_cache/
+__pypackages__/

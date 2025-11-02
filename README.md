@@ -1,70 +1,106 @@
-# Getting Started with Create React App
+🚗 Smart Parking Management System
+A Computer Vision and Machine Learning Based Smart Parking Management System
+📘 Overview
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project aims to design an intelligent parking management system that uses Computer Vision (CV) and Machine Learning (ML) techniques to efficiently monitor, detect, and manage parking slots in real-time.
+The system reduces human effort, improves space utilization, and provides a seamless parking experience through automation.
 
-## Available Scripts
+🧠 Key Features
 
-In the project directory, you can run:
+🎯 Real-Time Parking Detection: Detects empty and occupied parking spaces using CCTV camera feeds.
 
-### `npm start`
+🧩 Computer Vision Integration: Uses image processing to identify vehicle presence.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+🤖 Machine Learning Model: Classifies parking slots as occupied or free.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+📡 Smart Backend: Stores and manages parking data using a robust API.
 
-### `npm test`
+💻 Frontend Dashboard: Displays live parking status and analytics to users.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+🏗️ Project Architecture
+SmartParking/
+│
+├── Backend/           # Node.js / Express backend server
+│   ├── routes/        # API routes for parking management
+│   ├── models/        # Database models (PostgreSQL)
+│   └── controllers/   # Logic for user requests
+│
+├── cv_module_/        # Computer Vision module (Python)
+│   ├── detect_parking.py   # Detects available/occupied slots
+│   ├── utils/              # Image preprocessing, ROI handling
+│
+├── ml_module_/        # Machine Learning module (Python)
+│   ├── train_model.py     # Model training script
+│   ├── model.pkl          # Trained model file
+│
+├── frontend/          # Next.js frontend
+│   ├── pages/         # UI pages (Home, Dashboard, Admin)
+│   ├── components/    # Reusable UI components
+│
+├── README.md          # Project documentation
+└── run                # Entry point / run script
 
-### `npm run build`
+⚙️ Technologies Used
+Frontend:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Next.js (React Framework)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Tailwind CSS
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Backend:
 
-### `npm run eject`
+Node.js
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Express.js
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+PostgreSQL
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Computer Vision:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+OpenCV
 
-## Learn More
+NumPy
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Image Preprocessing
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Machine Learning:
 
-### Code Splitting
+Scikit-learn / TensorFlow
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Pandas
 
-### Analyzing the Bundle Size
+Numpy
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+🚀 How It Works
 
-### Making a Progressive Web App
+The camera feed is processed by the CV module using OpenCV to detect each parking slot.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+The extracted images are analyzed by the ML model to classify slots as empty or occupied.
 
-### Advanced Configuration
+The Backend API stores the slot status in the PostgreSQL database.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+The Frontend Dashboard displays real-time slot availability to users.
 
-### Deployment
+🧪 Future Enhancements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+📲 Integration with a mobile app for live updates
 
-### `npm run build` fails to minify
+🚘 Automatic number plate recognition (ANPR)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+💡 Predictive parking using deep learning models
+
+🔔 Voice-based or notification alerts for users
+
+👨‍💻 Team Members
+
+Sahil Ghidode – Frontend & Project Integration
+
+Ranu Patidar – Machine Learning Model
+
+Richa Mishra – Computer Vision & Image Processing
+
+Ruchi verma 4 – Backend & Database
+
+🧾 License
+
+This project is developed for academic purposes and can be extended for real-world smart city applications.
