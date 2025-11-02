@@ -10,7 +10,7 @@ const containerStyle = {
 };
 
 // Default center (New Delhi)
-const center = { lat: 28.6139, lng: 77.2090 };
+const center = { lat: 23.2494, lng: 77.4958 };
 
 export default function MapPage() {
   // Prevent SSR hydration errors by ensuring it runs only on the client

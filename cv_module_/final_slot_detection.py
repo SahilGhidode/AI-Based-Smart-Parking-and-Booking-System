@@ -5,7 +5,7 @@ from ultralytics import YOLO
 # -------------------------------
 # Load video
 # -------------------------------
-video_path = r"C:\Users\RICHA MISHRA\ParkVision\SmartParking\cv_module_\parking1.mp4"
+video_path = r"parking1.mp4"
 camera = cv2.VideoCapture(video_path)
 
 if not camera.isOpened():

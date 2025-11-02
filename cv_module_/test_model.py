@@ -10,7 +10,7 @@ model = YOLO("yolov8n.pt")  # you can also try yolov8s.pt for better accuracy
 # -------------------------------
 # Path to your video file
 # -------------------------------
-video_path = r"C:\Users\RICHA MISHRA\ParkVision\SmartParking\cv_module_\parking1.mp4"
+video_path = r"parking1.mp4"
 
 # Open video
 cap = cv2.VideoCapture(video_path)

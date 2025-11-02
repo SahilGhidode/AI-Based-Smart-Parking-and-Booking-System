@@ -1,7 +1,7 @@
 "use client";
 
-import type React from "react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useAuth } from "@/app/context/AuthContext";
 import { translations } from "@/lib/translations";
@@ -15,6 +15,7 @@ const MapPage = dynamic(() => import("../map/page"), { ssr: false });
 export default function Booking() {
   const { language } = useLanguage();
   const { isLoggedIn } = useAuth();
+  const router = useRouter();
   const t = translations[language];
 
   const [formData, setFormData] = useState({
@@ -25,18 +26,54 @@ export default function Booking() {
   });
 
   const [selectedSpot, setSelectedSpot] = useState<number | null>(null);
+  const [charges, setCharges] = useState<number | null>(null);
 
-  // ✅ No login restriction now — everyone can see & interact with the page
+  // ✅ If user is not logged in, show message + redirect button
+  if (!isLoggedIn) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-3xl font-bold text-text mb-4">
+            {t.booking}
+          </h1>
+          <p className="text-xl text-text-light mb-8">
+            Please log in to book a parking slot.
+          </p>
+          <button
+            onClick={() => router.push("/login")}
+            className="px-8 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition"
+          >
+            {t.login}
+          </button>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Booking submitted:", formData, selectedSpot);
+    console.log("Searching Parking:", formData);
   };
 
   const parkingSpots = Array.from({ length: 12 }, (_, i) => ({
     id: i + 1,
     available: Math.random() > 0.4,
   }));
+
+  const handleSelectSpot = (spotId: number) => {
+    setSelectedSpot(spotId);
+    const duration = parseInt(formData.duration) || 1;
+    const calculatedCharges = duration * 50; // ₹50/hour (example)
+    setCharges(calculatedCharges);
+  };
+
+  const handleProceedToPayment = () => {
+    router.push(
+      `/payment?spot=${selectedSpot}&amount=${charges}&duration=${formData.duration}`
+    );
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -71,6 +108,7 @@ export default function Booking() {
                       className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-primary"
                     />
                   </div>
+
                   <div>
                     <label className="block text-sm font-semibold text-text mb-2">
                       {t.selectDate}
@@ -84,6 +122,7 @@ export default function Booking() {
                       className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-primary"
                     />
                   </div>
+
                   <div>
                     <label className="block text-sm font-semibold text-text mb-2">
                       {t.selectTime}
@@ -97,6 +136,7 @@ export default function Booking() {
                       className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-primary"
                     />
                   </div>
+
                   <div>
                     <label className="block text-sm font-semibold text-text mb-2">
                       {t.duration}
@@ -125,13 +165,11 @@ export default function Booking() {
             {/* Map + Parking Spots */}
             <div className="lg:col-span-2">
               <div className="p-8 bg-surface rounded-xl border border-border">
-                {/* Google Map */}
                 <h2 className="text-2xl font-bold text-text mb-4">Map View</h2>
                 <div className="rounded-lg overflow-hidden border border-border mb-8">
                   <MapPage />
                 </div>
 
-                {/* Available Parking Spots */}
                 <h2 className="text-2xl font-bold text-text mb-6">
                   {t.availableSpots}
                 </h2>
@@ -139,7 +177,9 @@ export default function Booking() {
                   {parkingSpots.map((spot) => (
                     <button
                       key={spot.id}
-                      onClick={() => spot.available && setSelectedSpot(spot.id)}
+                      onClick={() =>
+                        spot.available && handleSelectSpot(spot.id)
+                      }
                       disabled={!spot.available}
                       className={`aspect-square flex items-center justify-center rounded-lg font-bold text-lg transition ${
                         spot.available
@@ -156,14 +196,27 @@ export default function Booking() {
 
                 {selectedSpot && (
                   <div className="mt-8 p-4 bg-primary/10 border border-primary rounded-lg">
-                    <p className="text-text mb-4">
+                    <p className="text-text mb-2">
                       Selected Spot:{" "}
                       <span className="font-bold text-primary">
                         #{selectedSpot}
                       </span>
                     </p>
-                    <button className="w-full px-4 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition">
-                      {isLoggedIn ? t.reserveNow : "Login to Reserve"}
+                    <p className="text-text mb-4">
+                      Duration: {formData.duration} hr(s)
+                    </p>
+                    <p className="text-text mb-4">
+                      Estimated Charges:{" "}
+                      <span className="font-bold text-primary">
+                        ₹{charges}
+                      </span>
+                    </p>
+
+                    <button
+                      onClick={handleProceedToPayment}
+                      className="w-full px-4 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition"
+                    >
+                      Proceed to Payment
                     </button>
                   </div>
                 )}
