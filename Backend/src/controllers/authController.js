@@ -8,7 +8,12 @@ dotenv.config({ path: ".env" });
 // 🟢 REGISTER USER
 export const registerUser = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    let { username, email, password } = req.body;
+
+    // ✅ Auto-generate username if not provided
+    if (!username) {
+      username = email.split("@")[0]; // e.g. sahilghidode12@gmail.com → sahilghidode12
+    }
 
     // Check if email already exists
     const existing = await findUserByEmail(email);

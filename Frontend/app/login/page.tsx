@@ -44,6 +44,7 @@ export default function Login() {
     setError("");
 
     try {
+      console.log("successfully connected to backend")
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

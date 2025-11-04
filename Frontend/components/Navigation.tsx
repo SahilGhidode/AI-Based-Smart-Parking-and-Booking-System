@@ -5,12 +5,19 @@ import { useState } from "react";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useAuth } from "@/app/context/AuthContext";
 import { translations } from "@/lib/translations";
+import { FaUserCircle } from "react-icons/fa"; // 👈 added user icon
 
 export default function Navigation() {
   const { language, setLanguage } = useLanguage();
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, user } = useAuth(); // 👈 get user info from AuthContext
   const t = translations[language];
   const [isOpen, setIsOpen] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  // Helper: get user initial
+  const getInitial = (name: string | undefined) => {
+    return name ? name.charAt(0).toUpperCase() : "";
+  };
 
   return (
     <nav className="fixed top-0 w-full bg-background border-b border-border shadow-sm z-50">
@@ -32,15 +39,12 @@ export default function Navigation() {
             <Link href="/features" className="text-text-light hover:text-primary transition">
               {t.features}
             </Link>
-
-            {/* ✅ Booking Pages always visible now */}
             <Link href="/booking" className="text-text-light hover:text-primary transition">
               {t.booking}
             </Link>
             <Link href="/my-booking" className="text-text-light hover:text-primary transition">
               {t.myBooking}
             </Link>
-
             <Link href="/about" className="text-text-light hover:text-primary transition">
               {t.about}
             </Link>
@@ -49,8 +53,8 @@ export default function Navigation() {
             </Link>
           </div>
 
-          {/* ✅ Right Side - Language + Auth */}
-          <div className="flex items-center gap-4">
+          {/* ✅ Right Side */}
+          <div className="flex items-center gap-4 relative">
             {/* Language Switcher */}
             <select
               value={language}
@@ -61,7 +65,7 @@ export default function Navigation() {
               <option value="hi">HI</option>
             </select>
 
-            {/* ✅ Auth Buttons */}
+            {/* ✅ Auth Section */}
             {!isLoggedIn ? (
               <div className="flex gap-2">
                 <Link href="/login" className="px-4 py-2 text-primary hover:bg-surface rounded-lg transition">
@@ -75,15 +79,31 @@ export default function Navigation() {
                 </Link>
               </div>
             ) : (
-              <button
-                onClick={logout}
-                className="px-4 py-2 text-primary hover:bg-surface rounded-lg transition"
-              >
-                {t.logout}
-              </button>
+              <div className="relative">
+                {/* Avatar Circle */}
+                <button
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg hover:opacity-90 transition"
+                >
+                  {getInitial(user?.name) || <FaUserCircle size={28} />}
+                </button>
+
+                {/* Dropdown */}
+                {showDropdown && (
+                  <div className="absolute right-0 mt-2 w-40 bg-surface border border-border rounded-lg shadow-lg">
+                    <p className="px-4 py-2 text-sm text-text">{user?.email}</p>
+                    <button
+                      onClick={logout}
+                      className="w-full text-left px-4 py-2 text-primary hover:bg-background rounded-b-lg transition"
+                    >
+                      {t.logout}
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
 
-            {/* ✅ Mobile Menu Button */}
+            {/* Mobile Menu Button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="md:hidden p-2 text-text hover:bg-surface rounded-lg"
@@ -104,15 +124,12 @@ export default function Navigation() {
             <Link href="/features" className="block px-4 py-2 text-text-light hover:text-primary">
               {t.features}
             </Link>
-
-            {/* ✅ Booking visible for everyone */}
             <Link href="/booking" className="block px-4 py-2 text-text-light hover:text-primary">
               {t.booking}
             </Link>
             <Link href="/my-booking" className="block px-4 py-2 text-text-light hover:text-primary">
               {t.myBooking}
             </Link>
-
             <Link href="/about" className="block px-4 py-2 text-text-light hover:text-primary">
               {t.about}
             </Link>
@@ -120,7 +137,7 @@ export default function Navigation() {
               {t.contact}
             </Link>
 
-            {/* ✅ Auth (Mobile View) */}
+            {/* Mobile Auth */}
             {!isLoggedIn ? (
               <div className="px-4 mt-2">
                 <Link href="/login" className="block py-2 text-primary hover:underline">
