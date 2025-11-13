@@ -1,0 +1,8 @@
+Removed:
+- ml_module_/MISHRA/  (local AppData temp folder copied into repo)
+- ml_module_/models/lr_slot_occ.joblib
+- ml_module_/models/ohe_lot.joblib
+- ml_module_/models/ohe_slot.joblib
+- ml_module_/models/rf_demand.joblib
+
+If you want any of these preserved instead, please restore from your local machine's AppData or tell me which ones to keep.

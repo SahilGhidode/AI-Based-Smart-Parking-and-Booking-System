@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+pydantic
+numpy
+pandas
+scikit-learn
+joblib
+xgboost
+opencv-python
+pyarrow
+tqdm
+
+# Notes:
+# - For YOLO/Ultralytics and PyTorch, follow system-specific install instructions
+#   (GPU vs CPU). See README_RUN.md for commands.
