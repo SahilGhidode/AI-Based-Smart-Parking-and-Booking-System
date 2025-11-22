@@ -93,13 +93,13 @@ The Frontend Dashboard displays real-time slot availability to users.
 
 👨‍💻 Team Members
 
-Sahil Ghidode – Frontend & Project Integration
+Sahil Ghidode – Backend & Database
 
 Ranu Patidar – Machine Learning Model
 
 Richa Mishra – Computer Vision & Image Processing
 
-Ruchi verma 4 – Backend & Database
+Ruchi verma 4 – Frontend & Project Integration
 
 🧾 License
 
