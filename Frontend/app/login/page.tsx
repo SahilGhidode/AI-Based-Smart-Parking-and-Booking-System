@@ -30,29 +30,42 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // ✅ Redirect if already logged in
+  // ⬇️ GOOGLE LOGIN
+  const handleGoogleLogin = () => {
+    console.log("🔥 GOOGLE LOGIN CLICKED");
+    localStorage.removeItem("token");
+
+    const url = "http://localhost:5000/api/auth/google"; // ⚠️ Backend Port
+    console.log("🌐 Redirecting:", url);
+
+    window.open(url, "_self"); // Force external redirect
+  };
+
+  // 🟢 Auto redirect if already logged in
   useEffect(() => {
     if (isLoggedIn) {
       router.push("/");
     }
   }, [isLoggedIn, router]);
 
-  // ✅ Handle Login
+  // 🟢 Normal Email/Password Login
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
-      console.log("successfully connected to backend")
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
+        }
+      );
 
       const data = await res.json();
 
@@ -60,13 +73,12 @@ export default function Login() {
         throw new Error(data.message || "Login failed");
       }
 
-      // ✅ Save JWT
+      // Save JWT
       localStorage.setItem("token", data.token);
 
-      // ✅ Decode JWT to get user info
+      // Decode token
       const decoded: DecodedToken = jwtDecode(data.token);
 
-      // ✅ Update Auth Context
       login({
         id: decoded.id,
         name: decoded.email.split("@")[0],
@@ -74,7 +86,6 @@ export default function Login() {
         mobile: "",
       });
 
-      // ✅ Redirect to dashboard/home
       router.push("/");
     } catch (err: any) {
       setError(err.message);
@@ -86,6 +97,7 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-surface to-background flex items-center justify-center px-4">
       <div className="w-full max-w-md p-8 bg-background rounded-2xl shadow-lg border border-border">
+
         {/* Logo */}
         <div className="flex justify-center mb-8">
           <div className="w-12 h-12 bg-gradient-to-r from-primary to-accent rounded-lg flex items-center justify-center">
@@ -97,8 +109,11 @@ export default function Login() {
         <p className="text-text-light text-center mb-8">{t.welcome} to SmartPark</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Email */}
           <div>
-            <label className="block text-sm font-semibold text-text mb-2">{t.email}</label>
+            <label className="block text-sm font-semibold text-text mb-2">
+              {t.email}
+            </label>
             <input
               type="email"
               required
@@ -109,8 +124,11 @@ export default function Login() {
             />
           </div>
 
+          {/* Password */}
           <div>
-            <label className="block text-sm font-semibold text-text mb-2">{t.password}</label>
+            <label className="block text-sm font-semibold text-text mb-2">
+              {t.password}
+            </label>
             <input
               type="password"
               required
@@ -121,6 +139,7 @@ export default function Login() {
             />
           </div>
 
+          {/* Remember me */}
           <div className="flex items-center justify-between">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -140,6 +159,7 @@ export default function Login() {
 
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
+          {/* Login Button */}
           <button
             type="submit"
             disabled={loading}
@@ -153,6 +173,7 @@ export default function Login() {
           </button>
         </form>
 
+        {/* Divider */}
         <div className="my-6 relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-border"></div>
@@ -162,7 +183,17 @@ export default function Login() {
           </div>
         </div>
 
-        <p className="text-center text-text-light">
+        {/* GOOGLE LOGIN BUTTON */}
+        <button
+          type="button"
+          onClick={handleGoogleLogin}
+          className="w-full flex justify-center items-center gap-3 px-4 py-3 border rounded-lg"
+        >
+          <img src="/google.svg" className="w-5 h-5" />
+          Continue with Google
+        </button>
+
+        <p className="text-center text-text-light mt-6">
           {t.dontHaveAccount}{" "}
           <Link href="/signup" className="text-primary font-semibold hover:underline">
             {t.signup}
