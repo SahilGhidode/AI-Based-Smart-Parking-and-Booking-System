@@ -83,7 +83,7 @@ Camera → OpenCV → YOLOv8 → Backend API → Database → Next.js Dashboard
 * Node.js
 * Express.js
 * REST API
-* MongoDB / PostgreSQL
+* PostgreSQL
 
 ### Frontend
 
@@ -135,7 +135,7 @@ Smart-Parking-System/
 
 * Node.js (v16+)
 * Python (3.8+)
-* MongoDB / PostgreSQL
+* PostgreSQL
 * Git
 
 ---
@@ -262,9 +262,6 @@ Ranu Patidar – Machine Learning Model
 Richa Mishra – Computer Vision & Image Processing
 
 Ruchi verma 4 – Frontend & Project Integration
-
-LinkedIn: [https://www.linkedin.com/in/sahil-ghidode-b9937b295/](https://www.linkedin.com/in/sahil-ghidode-b9937b295/)
-GitHub: [https://github.com/SahilGhidode](https://github.com/SahilGhidode)
 
 ---
 
