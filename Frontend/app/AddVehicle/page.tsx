@@ -12,7 +12,8 @@ export default function AddVehiclePage() {
   // Vehicle number format: MP04AS2939
   const vehicleRegex = /^[A-Z]{2}\d{2}[A-Z]{2}\d{4}$/;
 
-  const handleVehicleNumberChange = (value) => {
+  const handleVehicleNumberChange = (value: string) => {
+
     const formatted = value.toUpperCase().replace(/\s/g, "");
     setVehicleNumber(formatted);
 
@@ -38,7 +39,8 @@ export default function AddVehiclePage() {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+
     e.preventDefault();
 
     const userId = getUserIdFromToken();
@@ -61,7 +63,8 @@ export default function AddVehiclePage() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/vehicles/add", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/vehicles/add`, {
+
         method: "POST",
         headers: {
           "Content-Type": "application/json",
