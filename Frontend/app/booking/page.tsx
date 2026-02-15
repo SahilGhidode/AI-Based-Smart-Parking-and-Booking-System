@@ -9,12 +9,12 @@ import { translations } from "@/lib/translations";
 // Components
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import dynamic from "next/dynamic";
+import nextDynamic from "next/dynamic";
 
 // Real slot APIs
 import { fetchSlots, subscribeSlotUpdates } from "@/lib/parking/getSlots";
 
-const MapPage = dynamic(() => import("../map/page"), { ssr: false });
+const MapPage = nextDynamic(() => import("../map/page"), { ssr: false });
 
 export default function Booking() {
   const { language } = useLanguage();
