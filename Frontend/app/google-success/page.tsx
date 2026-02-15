@@ -1,4 +1,9 @@
 "use client";
+interface CustomJwtPayload {
+  id: string;
+  email: string;
+  userId?: string;
+}
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
