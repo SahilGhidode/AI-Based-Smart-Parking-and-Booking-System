@@ -28,7 +28,7 @@ export default function GoogleSuccess() {
     localStorage.setItem("token", token);
 
     // 3️⃣ Decode Token
-    const decoded = jwtDecode(token);
+    const decoded = jwtDecode<CustomJwtPayload>(token);
 
     // 4️⃣ Update AuthContext
     login({
