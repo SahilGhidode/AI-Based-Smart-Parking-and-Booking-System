@@ -12,7 +12,7 @@ const pool = new Pool({
   database: process.env.DB_NAME || "smart_parking",
   password: process.env.DB_PASSWORD || "smart_password",
   port: process.env.DB_PORT || 5432,
-  // ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false }
 });
 
 // ✅ Test connection
