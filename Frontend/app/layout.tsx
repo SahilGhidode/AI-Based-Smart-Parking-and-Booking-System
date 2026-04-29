@@ -21,8 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} font-sans antialiased`}>
+    <html lang="en" suppressHydrationWarning className="scroll-smooth">
+      <body className={`${inter.className} font-sans antialiased bg-background text-foreground transition-colors duration-500`}>
         <Providers>{children}</Providers>
         {/* <Analytics /> */}
       </body>

@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useAuth } from "@/app/context/AuthContext";
 import { translations } from "@/lib/translations";
 import { FaUserCircle } from "react-icons/fa";
+import { ThemeToggle } from "./ThemeToggle";
+import gsap from "gsap";
 
 export default function Navigation() {
   const { language, setLanguage } = useLanguage();
@@ -13,17 +15,90 @@ export default function Navigation() {
   const t = translations[language];
   const [isOpen, setIsOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const navRef = useRef<HTMLNavElement>(null);
+  const menuItemsRef = useRef<(HTMLElement | null)[]>([]);
 
   const getInitial = (name: string | undefined) => {
     return name ? name.charAt(0).toUpperCase() : "";
   };
 
+  // GSAP animations on mount
+  useEffect(() => {
+    if (navRef.current) {
+      // Animate nav entrance
+      gsap.from(navRef.current, {
+        y: -100,
+        opacity: 0,
+        duration: 0.8,
+        ease: "back.out",
+      });
+
+      // Stagger animate menu items
+      const menuItems = navRef.current.querySelectorAll(".nav-item");
+      gsap.from(menuItems, {
+        opacity: 0,
+        y: -10,
+        stagger: 0.1,
+        duration: 0.6,
+        delay: 0.2,
+        ease: "power2.out",
+      });
+    }
+  }, []);
+
+  // Animate mobile menu
+  useEffect(() => {
+    const mobileMenu = document.querySelector(".mobile-menu");
+    if (mobileMenu) {
+      if (isOpen) {
+        gsap.to(mobileMenu, {
+          height: "auto",
+          opacity: 1,
+          duration: 0.3,
+          ease: "power2.out",
+        });
+      } else {
+        gsap.to(mobileMenu, {
+          height: 0,
+          opacity: 0,
+          duration: 0.3,
+          ease: "power2.in",
+        });
+      }
+    }
+  }, [isOpen]);
+
+  // Animate dropdown
+  useEffect(() => {
+    const dropdown = document.querySelector(".user-dropdown");
+    if (dropdown) {
+      if (showDropdown) {
+        gsap.to(dropdown, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.2,
+          ease: "back.out",
+        });
+      } else {
+        gsap.to(dropdown, {
+          opacity: 0,
+          scale: 0.95,
+          duration: 0.2,
+          ease: "power2.in",
+          pointerEvents: "none",
+        });
+      }
+    }
+  }, [showDropdown]);
+
   return (
     <nav
+      ref={navRef}
       className="
         fixed top-0 w-full z-50 animate-fadeIn
         glass shadow-lg border-b border-blue-300/20
-        backdrop-blur-xl transition-all
+        backdrop-blur-xl transition-all duration-500
+        dark:bg-slate-950/80 dark:border-slate-700/50
       "
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -53,8 +128,9 @@ export default function Navigation() {
                 key={i}
                 href={item.href}
                 className="
-                  text-text-light hover:text-blue-600 transition-all 
-                  hover:drop-shadow-sm hover:scale-[1.03]
+                  nav-item text-text-light hover:text-blue-600 transition-all 
+                  hover:drop-shadow-sm hover:scale-[1.03] dark:text-slate-300
+                  dark:hover:text-blue-400
                 "
               >
                 {item.label}
@@ -63,7 +139,10 @@ export default function Navigation() {
           </div>
 
           {/* RIGHT SIDE */}
-          <div className="flex items-center gap-4 relative">
+          <div className="flex items-center gap-3 relative">
+
+            {/* THEME TOGGLE */}
+            <ThemeToggle />
 
             {/* LANGUAGE */}
             <select
@@ -73,6 +152,8 @@ export default function Navigation() {
                 px-3 py-1 border border-blue-300/40 rounded-lg text-sm 
                 bg-white/40 backdrop-blur-xl text-text cursor-pointer
                 hover:bg-white/60 transition
+                dark:bg-slate-700/40 dark:border-blue-400/30 dark:text-slate-200
+                dark:hover:bg-slate-600/50
               "
             >
               <option value="en">EN</option>
@@ -87,6 +168,7 @@ export default function Navigation() {
                   className="
                     px-4 py-2 text-blue-600 hover:bg-blue-100/40 rounded-lg 
                     transition-all hover:scale-[1.03]
+                    dark:text-blue-400 dark:hover:bg-blue-500/10
                   "
                 >
                   {t.login}
@@ -97,6 +179,7 @@ export default function Navigation() {
                     px-4 py-2 bg-blue-600 text-white rounded-lg 
                     hover:bg-blue-700 transition-all shadow-md hover:shadow-lg
                     hover:scale-[1.03]
+                    dark:bg-blue-500 dark:hover:bg-blue-600 dark:shadow-blue-500/30
                   "
                 >
                   {t.signup}
@@ -121,8 +204,9 @@ export default function Navigation() {
                 {showDropdown && (
                   <div
                     className="
-                      absolute right-0 mt-3 w-56 glass border-blue-200/30
-                      rounded-lg shadow-xl animate-slideDown overflow-hidden
+                      user-dropdown absolute right-0 mt-3 w-56 glass border-blue-200/30
+                      rounded-lg shadow-xl overflow-hidden
+                      dark:bg-slate-800/90 dark:border-slate-700/50
                     "
                   >
                     {/* EMAIL */}
@@ -192,7 +276,7 @@ export default function Navigation() {
 
         {/* MOBILE MENU */}
         {isOpen && (
-          <div className="md:hidden pb-4 border-t border-border animate-slideDown">
+          <div className="mobile-menu md:hidden pb-4 border-t border-border dark:border-slate-700">
             {[
               { label: t.home, href: "/" },
               { label: t.features, href: "/features" },
